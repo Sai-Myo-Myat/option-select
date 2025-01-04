@@ -1,7 +1,14 @@
 {
   "name": "option-select",
-  "version": "1.0.0",
-  "main": "",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest",
