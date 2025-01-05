@@ -6,6 +6,7 @@ import {
   OptionSelectProps,
   OptionSelectReturnProps,
 } from "../types";
+import { setToggleSelectedFunctionRecursively } from "../utils";
 
 export const useOptionSelect = <T extends ID>(
   props: OptionSelectProps<T>
@@ -30,12 +31,20 @@ export const useOptionSelect = <T extends ID>(
     return unsubscribe; // Cleanup on unmount
   }, [data]);
 
+  const toggle = useCallback(
+    (option: Option<T>, value: boolean) => {
+      data.toggleSelected(option, value);
+    },
+    []
+  );
+
   useEffect(() => {
-    optionsFromDataCentre.map((option) => {
-      option.toggleSelected = (value: boolean) =>
-        data.toggleSelect(option, value);
-      option.isSelected = data.isSelected(option);
-    });
+    setToggleSelectedFunctionRecursively(optionsFromDataCentre, toggle);
+    // optionsFromDataCentre.map((option) => {
+    //   option.toggleSelected = (value: boolean) =>
+    //     data.toggleSelected(option, value);
+    //   option.isSelected = data.isSelected(option);
+    // });
   }, [optionsFromDataCentre]);
 
   const getSelectedOptions = useCallback(() => {

@@ -9,10 +9,11 @@ export interface OptionSelectReturnProps<T extends ID> {
 }
 
 export type Option<T extends ID> = {
-  children?: T[];
+  subOptions?: Option<T>[];
   toggleSelected?: (value: boolean) => void;
   isSelected?: boolean;
 } & T;
+
 export interface ID {
   id: number;
 }
