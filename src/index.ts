@@ -14,7 +14,7 @@ class DATA_CENTRE<T extends ID> {
   }
 
   toggleSelect(option: Option<T>, value: boolean) {
-    this.selectedOptions = toggleItem(this.options, option, value);
+    this.selectedOptions = toggleItem(this.selectedOptions, option, value);
   }
 
   isSelected(option: Option<T>) {
