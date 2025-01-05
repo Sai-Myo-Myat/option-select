@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DATA_CENTRE } from "../modal";
 import {
   ID,
@@ -12,35 +12,46 @@ export const useOptionSelect = <T extends ID>(
 ): OptionSelectReturnProps<T> => {
   const { options } = props;
 
-  const [ops] = useState(options);
-
-  console.log("options: ", ops)
-
   const selectedOptions = options.filter(
     (option) => option.isSelected === true
   );
 
-  const data = new DATA_CENTRE(options, selectedOptions);
+  const [data] = useState(() => new DATA_CENTRE(options, selectedOptions));
 
-  const optionsFromDataCentre = data.getOptions();
+  const [optionsFromDataCentre, setOptionsFromDataCentre] = useState(
+    data.getOptions()
+  );
 
-  optionsFromDataCentre.map((option) => {
-    option.toggleSelected = (value: boolean) =>
-      data.toggleSelect(option, value);
-    option.isSelected = data.isSelected(option);
-  });
+  useEffect(() => {
+    // Subscribe to changes and update state
+    const unsubscribe = data.subscribe(() => {
+      setOptionsFromDataCentre(data.getOptions());
+    });
+    return unsubscribe; // Cleanup on unmount
+  }, [data]);
 
-  const getSelectedOptions = () => {
+  useEffect(() => {
+    optionsFromDataCentre.map((option) => {
+      option.toggleSelected = (value: boolean) =>
+        data.toggleSelect(option, value);
+      option.isSelected = data.isSelected(option);
+    });
+  }, [optionsFromDataCentre]);
+
+  const getSelectedOptions = useCallback(() => {
     return data.getSelectedOptions();
-  };
+  }, []);
 
-  const onSelectionChange = (fn: (options: Option<T>[]) => void) => {
-    fn(data.getSelectedOptions());
-  };
+  const onSelectionChange = useCallback(
+    (fn: (options: Option<T>[]) => void) => {
+      fn(data.getSelectedOptions());
+    },
+    [data]
+  );
 
-  const getOptions = () => {
-    return data.getOptions();
-  };
+  const getOptions = useCallback(() => {
+    return optionsFromDataCentre;
+  }, [optionsFromDataCentre]);
 
   return {
     getOptions,
