@@ -1,8 +1,8 @@
 import { ID, Listener, Option } from "./types";
 import {
+  findAndtoggleIsSelectedRecursively,
   getSelectedOptionRecursively,
   setToggleSelectedFunctionRecursively,
-  toggleIsSelectedRecursively,
 } from "./utils";
 
 export class DATA_CENTRE<T extends ID> {
@@ -10,25 +10,27 @@ export class DATA_CENTRE<T extends ID> {
   private selectedOptions: Option<T>[];
   private listeners: Set<Listener>;
   constructor(options: Option<T>[], selectedOptions: Option<T>[]) {
-    this.options = options;
+    this.options = this.setToggleSelectedFunction(options);
     this.selectedOptions =
       selectedOptions || getSelectedOptionRecursively(options);
     this.listeners = new Set();
   }
 
   toggleSelected(option: Option<T>, value: boolean) {
-    this.options = this.options.map((op) => {
-      if (op.id === option.id) {
-        toggleIsSelectedRecursively(op, value);
-      }
-      return op;
-    });
+    this.options = findAndtoggleIsSelectedRecursively(
+      this.options,
+      option,
+      value
+    );
     this.selectedOptions = getSelectedOptionRecursively(this.options);
     this.notifyListeners();
   }
 
   setToggleSelectedFunction(options: Option<T>[]) {
-    setToggleSelectedFunctionRecursively(options, this.toggleSelected);
+    const func = (option: Option<T>, value: boolean) => {
+      this.toggleSelected(option, value);
+    };
+    return setToggleSelectedFunctionRecursively(options, func);
   }
 
   //don't use
