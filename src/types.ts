@@ -22,4 +22,4 @@ export interface DATA_CENTRE_TYPE<T extends ID> {
   options: Option<T>[];
 }
 
-export type Listener = () => void;
+export type Subscriber = () => void;
