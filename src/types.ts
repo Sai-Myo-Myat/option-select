@@ -1,5 +1,6 @@
-export interface OptionSelectProps<T extends ID> {
-  options: Option<T>[];
+export interface OptionSelectProps<T> {
+  options: T[];
+  getId: (item: T) => string;
 }
 
 export interface OptionSelectReturnProps<T extends ID> {
