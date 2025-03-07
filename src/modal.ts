@@ -43,4 +43,14 @@ export class DATA_CENTREe<T extends { subItems?: T[] }> {
     }
     this.notify();
   }
+
+  isSelected(id: string, item?: T) {
+    if (item?.subItems?.length) {
+      const allChildrenSelected = this.getAllChildIds(item).every((childId) =>
+        this.selectedIds.has(childId)
+      );
+      return allChildrenSelected;
+    }
+    return this.selectedIds.has(id);
+  }
 }
