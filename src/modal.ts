@@ -53,4 +53,13 @@ export class DATA_CENTREe<T extends { subItems?: T[] }> {
     }
     return this.selectedIds.has(id);
   }
+
+  getAllItems(items: T[]): any[] {
+    return items.map((item) => ({
+      item,
+      isSelected: this.isSelected(this.getId(item), item),
+      toggleSelection: () => this.toggleSelection(this.getId(item), item),
+      subItems: item.subItems ? this.getAllItems(item.subItems) : undefined,
+    }));
+  }
 }
