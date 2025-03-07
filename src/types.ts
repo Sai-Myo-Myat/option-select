@@ -1,5 +1,5 @@
 export interface OptionSelectProps<T> {
-  options: T[];
+  items: T[];
   getId: (item: T) => string;
 }
 

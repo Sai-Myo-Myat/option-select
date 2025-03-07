@@ -1,6 +1,6 @@
 import { Subscriber } from "./types";
 
-export class DATA_CENTREe<T extends { subItems?: T[] }> {
+export class DATA_CENTRE<T extends { subItems?: T[] }> {
   private selectedIds = new Set<string>();
   private subscribers: Subscriber[] = [];
 
