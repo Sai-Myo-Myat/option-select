@@ -1,6 +1,6 @@
-import { ID, Subscriber } from "./types";
+import { Subscriber } from "./types";
 
-export class DATA_CENTRE<T extends ID> {
+export class DATA_CENTREe<T extends { subItems?: T[] }> {
   private selectedIds = new Set<string>();
   private subscribers: Subscriber[] = [];
 
@@ -16,5 +16,31 @@ export class DATA_CENTRE<T extends ID> {
     return () => {
       this.subscribers = this.subscribers.filter((sub) => sub !== callback);
     };
+  }
+
+  private getAllChildIds(item: T): string[] {
+    if (!item.subItems) return [];
+    return item.subItems.flatMap((sub) => [
+      this.getId(sub),
+      ...this.getAllChildIds(sub),
+    ]);
+  }
+
+  toggleSelection(id: string, item?: T) {
+    const isSelected = this.selectedIds.has(id);
+    if (isSelected) {
+      this.selectedIds.delete(id);
+      if (item)
+        this.getAllChildIds(item).forEach((childId) =>
+          this.selectedIds.delete(childId)
+        );
+    } else {
+      this.selectedIds.add(id);
+      if (item)
+        this.getAllChildIds(item).forEach((childId) =>
+          this.selectedIds.add(childId)
+        );
+    }
+    this.notify();
   }
 }
