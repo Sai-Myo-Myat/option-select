@@ -49,6 +49,12 @@ export class DATA_CENTRE<T extends { subItems?: T[] }> {
       const allChildrenSelected = this.getAllChildIds(item).every((childId) =>
         this.selectedIds.has(childId)
       );
+      if (allChildrenSelected && !this.selectedIds.has(id)) {
+        this.selectedIds.add(id);
+      }
+      if (!allChildrenSelected) {
+        this.selectedIds.delete(id);
+      }
       return allChildrenSelected;
     }
     return this.selectedIds.has(id);
