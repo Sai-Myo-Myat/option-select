@@ -20,7 +20,7 @@ yarn add option-select
 - ✅ Supports hierarchical data structures
 - ✅ Select, deselect, toggle items
 - ✅ Select all & deselect all functionality
-- ✅ Retrieve selected items on demand on every selection changes happen
+- ✅ Retrieve selected items on demand or on every selection changes happen
 
 ## Usage
 
@@ -45,9 +45,16 @@ const items = [
   },
 ];
 
+const handleOnChange = useCallback((items) => {
+    console.log("selected items", items);
+},[])
+
 const { getAllItems, selectAll, deselectAll, getSelectedItems } = useOptionSelect(
-  items,
-  (item) => item.id
+  {
+    items: items,
+    getId: (item) => item.id,
+    onSelectionChange: handleOnChange
+  }
 );
 
 function renderItem({ item, isSelected, toggleSelection, subItems }) {
@@ -80,7 +87,7 @@ return (
 
 ## API
 
-### `useOptionSelect(items: T[], getId: (item: T) => string)`
+### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange: (item: T[]) => void})`
 
 Returns an object with the following methods:
 
@@ -91,7 +98,7 @@ Returns an object with the following methods:
 - **`deselectAll(): void`**
   - Deselects all items.
 - **`getSelectedItems(): T[]`**
-  - Returns selected items in the same structure as the input.
+  - Returns selected items in the same hierarchical structure as the input.
 
 ## License
 
