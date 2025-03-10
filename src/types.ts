@@ -1,6 +1,7 @@
 export interface OptionSelectProps<T> {
   items: T[];
   getId: (item: T) => string;
+  onSelectionChange?: (items: T[]) => void;
 }
 
 export interface OptionSelectReturnProps<T extends ID> {

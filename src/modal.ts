@@ -3,19 +3,19 @@ import { Subscriber } from "./types";
 export class DATA_CENTRE<T extends { subItems?: T[] }> {
   private selectedIds = new Set<string>();
   private subscribers: Subscriber[] = [];
-  private onSelectionChange: (items: T[]) => void;
+  private onSelectionChange?: (items: T[]) => void;
 
   constructor(
     private items: T[],
     private getId: (item: T) => string,
-    onSelectionChange: (items: T[]) => void
+    onSelectionChange?: (items: T[]) => void
   ) {
     this.onSelectionChange = onSelectionChange;
   }
   // subscription model implementation
   private notify() {
     this.subscribers.forEach((callback) => callback());
-    this.onSelectionChange(this.getSelectedItems());
+    this.onSelectionChange && this.onSelectionChange(this.getSelectedItems());
   }
 
   subscribe(callback: Subscriber) {
