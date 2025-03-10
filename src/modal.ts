@@ -3,12 +3,19 @@ import { Subscriber } from "./types";
 export class DATA_CENTRE<T extends { subItems?: T[] }> {
   private selectedIds = new Set<string>();
   private subscribers: Subscriber[] = [];
+  private onSelectionChange: (items: T[]) => void;
 
-  constructor(private items: T[], private getId: (item: T) => string) {}
-
+  constructor(
+    private items: T[],
+    private getId: (item: T) => string,
+    onSelectionChange: (items: T[]) => void
+  ) {
+    this.onSelectionChange = onSelectionChange;
+  }
   // subscription model implementation
   private notify() {
     this.subscribers.forEach((callback) => callback());
+    this.onSelectionChange(this.getSelectedItems());
   }
 
   subscribe(callback: Subscriber) {
@@ -75,6 +82,22 @@ export class DATA_CENTRE<T extends { subItems?: T[] }> {
       return allChildrenSelected;
     }
     return this.selectedIds.has(id);
+  }
+
+  getSelectedItems(items: T[] = this.items): T[] {
+    return items
+      .map((item) => {
+        const subItems = item.subItems
+          ? this.getSelectedItems(item.subItems)
+          : undefined;
+        const isSelected = this.selectedIds.has(this.getId(item));
+
+        if (isSelected || (subItems && subItems.length > 0)) {
+          return { ...item, subItems };
+        }
+        return null;
+      })
+      .filter(Boolean) as T[];
   }
 
   getAllItems(items: T[]): any[] {
