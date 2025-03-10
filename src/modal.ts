@@ -18,6 +18,23 @@ export class DATA_CENTRE<T extends { subItems?: T[] }> {
     };
   }
 
+  private getAllItemIds(items: T[]): string[] {
+    return items.flatMap((item) => [
+      this.getId(item),
+      ...this.getAllChildIds(item),
+    ]);
+  }
+
+  selectAll() {
+    this.selectedIds = new Set(this.getAllItemIds(this.items));
+    this.notify();
+  }
+
+  deselectAll() {
+    this.selectedIds.clear();
+    this.notify();
+  }
+
   private getAllChildIds(item: T): string[] {
     if (!item.subItems) return [];
     return item.subItems.flatMap((sub) => [

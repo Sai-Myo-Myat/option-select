@@ -15,7 +15,7 @@ export const useOptionSelect = <T extends { subItems?: T[] }>(
 
   return {
     getAllItems: () => store.getAllItems(items),
-    selectAll: () => store.toggleSelection("all"),
-    deselectAll: () => store.toggleSelection("none"),
+    selectAll: () => store.selectAll(),
+    deselectAll: () => store.deselectAll(),
   };
 };
