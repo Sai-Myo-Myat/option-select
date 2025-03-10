@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { DATA_CENTRE } from "../modal";
-import { OptionSelectProps } from "../types";
 
-export const useOptionSelect = <T extends { subItems?: T[] }>({
-  items,
-  getId,
-}: OptionSelectProps<T>) => {
+export const useOptionSelect = <T extends { subItems?: T[] }>(
+  items: T[],
+  getId: (item: T) => string
+) => {
   const [store] = useState(() => new DATA_CENTRE(items, getId));
   const [_, setVersion] = useState(0);
 
