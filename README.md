@@ -16,11 +16,12 @@ yarn add option-select
 
 ## Features
 
-- ✅ Store-based architecture (framework-agnostic)
-- ✅ Supports hierarchical data structures
+- ✅ Supports hierarchical data structures (parent item and  sub items)
 - ✅ Select, deselect, toggle items
 - ✅ Select all & deselect all functionality
 - ✅ Retrieve selected items on demand or on every selection changes happen
+- ✅ Accept isSelected for default selection, but if an item has subItems and not all subItems have isSelected: true, the parent’s isSelected state will be ignored.
+- ✅ Store-based architecture (framework-agnostic)
 
 ## Usage
 
@@ -30,20 +31,32 @@ yarn add option-select
 import { useOptionSelect } from "option-select";
 
 const items = [
-  {
-    id: "1",
-    name: "Parent 1",
-    subItems: [
-      { id: "1-1", name: "Child 1-1" },
-      { id: "1-2", name: "Child 1-2" },
-    ],
-  },
-  {
-    id: "2",
-    name: "Parent 2",
-    subItems: [{ id: "2-1", name: "Child 2-1" }],
-  },
-];
+    {
+      id: "1",
+      name: "Parent 1",
+      subItems: [
+        { id: "1-1", name: "Child 1-1", isSelected: true },
+        { id: "1-2", name: "Child 1-2", isSelected: true },
+      ],
+    },
+    {
+      id: "2",
+      name: "Parent 2",
+      subItems: [
+        {
+          id: "2-1",
+          name: "Child 2-1",
+          isSelected: true,
+          subItems: [{ id: "2-1-1", name: "Child 2-1-1" }],
+        },
+        {
+          id: "2-2",
+          name: "Child 2-2",
+          subItems: [{ id: "2-2-1", name: "Child 2-2-1" }],
+        },
+      ],
+    },
+  ];
 
 const handleOnChange = useCallback((items) => {
     console.log("selected items", items);
@@ -91,7 +104,7 @@ return (
 
 Returns an object with the following methods:
 
-- **`getAllItems(): { item: T; isSelected: boolean; toggleSelection: () => void; subItems?: any[] }[]`**
+- **`getAllItems(): { item: T; isSelected: boolean; toggleSelection: () => void; subItems?: T[] }[]`**
   - Returns items wrapped with selection controls.
 - **`selectAll(): void`**
   - Selects all items.
