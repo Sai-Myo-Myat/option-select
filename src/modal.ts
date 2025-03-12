@@ -1,13 +1,10 @@
-import { Subscriber } from "./types";
+import { OptionItem, Subscriber } from "./types";
 
 export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
   private selectedIds = new Set<string>();
   private subscribers: Subscriber[] = [];
 
-  constructor(
-    private items: T[],
-    private getId: (item: T) => string,
-  ) {
+  constructor(private items: T[], private getId: (item: T) => string) {
     this.items.forEach((item) => {
       if (item.isSelected) {
         this.selectedIds.add(this.getId(item));
@@ -109,7 +106,7 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
       .filter(Boolean) as T[];
   }
 
-  getAllItems(items: T[]): any[] {
+  getAllItems(items: T[]): OptionItem<T>[] {
     return items.map((item) => ({
       item,
       isSelected: this.isSelected(this.getId(item), item),
