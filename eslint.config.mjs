@@ -1,19 +1,22 @@
-import pluginJs from "@eslint/js";
+import js from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import reactHooks from "eslint-plugin-react-hooks";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { extends: ["eslint:recommended", "plugin:react-hooks/recommended"] },
+  js.configs.recommended, // JavaScript recommended rules
+  ...tseslint.configs.recommended, // TypeScript recommended rules
   {
-    files: ["**/*.{js,mjs,cjs,ts}"],
-    plugins: ["react-hooks"],
+    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
+    plugins: { "react-hooks": reactHooks },
     rules: {
-      "react-hooks/rules-of-hooks": "error", // Checks rules of hooks
-      "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+    languageOptions: {
+      parser: tseslint.parser,
+      globals: globals.browser,
     },
   },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
 ];
