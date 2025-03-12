@@ -1,21 +1,30 @@
 import { Subscriber } from "./types";
 
-export class DATA_CENTRE<T extends { subItems?: T[] }> {
+export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
   private selectedIds = new Set<string>();
   private subscribers: Subscriber[] = [];
-  private onSelectionChange?: (items: T[]) => void;
 
   constructor(
     private items: T[],
     private getId: (item: T) => string,
-    onSelectionChange?: (items: T[]) => void
   ) {
-    this.onSelectionChange = onSelectionChange;
+    this.items.forEach((item) => {
+      if (item.isSelected) {
+        this.selectedIds.add(this.getId(item));
+      }
+
+      if (item.subItems) {
+        item.subItems.forEach((item) => {
+          if (item.isSelected) {
+            this.selectedIds.add(this.getId(item));
+          }
+        });
+      }
+    });
   }
   // subscription model implementation
   private notify() {
     this.subscribers.forEach((callback) => callback());
-    this.onSelectionChange && this.onSelectionChange(this.getSelectedItems());
   }
 
   subscribe(callback: Subscriber) {
@@ -93,7 +102,7 @@ export class DATA_CENTRE<T extends { subItems?: T[] }> {
         const isSelected = this.selectedIds.has(this.getId(item));
 
         if (isSelected || (subItems && subItems.length > 0)) {
-          return { ...item, subItems };
+          return { ...item, isSelected, subItems };
         }
         return null;
       })
