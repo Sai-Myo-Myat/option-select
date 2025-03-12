@@ -2,6 +2,8 @@
 
 A headless checkbox selection library for JavaScript front-end frameworks like React (and more later). Supports hierarchical data structures and allows selection tracking with full control.
 
+Live demo :  https://thriving-puppy-98d015.netlify.app/
+
 ## Installation
 
 ```sh
@@ -97,6 +99,7 @@ return (
   </div>
 );
 ```
+Test live:  https://stackblitz.com/edit/sb1-u7tsdxnd?file=src%2FApp.tsx
 
 ## API
 
