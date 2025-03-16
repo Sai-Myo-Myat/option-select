@@ -102,7 +102,7 @@ return (
 
 ## API
 
-### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange: (item: T[]) => void})`
+### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange?: (item: T[]) => void})`
 
 Returns an object with the following methods:
 
