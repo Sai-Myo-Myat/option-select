@@ -1,6 +1,6 @@
-# Headless Checkbox Selection
+# Headless Option Selection
 
-A headless checkbox selection library for JavaScript front-end frameworks like React (and more later). Supports hierarchical data structures and allows selection tracking with full control.
+A headless option selection library for JavaScript front-end frameworks like React (and more later). Supports hierarchical data structures and allows selection tracking with full control.
 
 Live demo :  [option-select-demo](https://stackblitz.com/edit/sb1-mtgegjcy?file=src%2FApp.tsx)
 
