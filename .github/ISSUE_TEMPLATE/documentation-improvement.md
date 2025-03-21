@@ -2,7 +2,7 @@
 name: Documentation Improvement
 about: Suggest improvements to the documentation.
 title: "[Documentation Improvement]"
-labels: ''
+labels: documentation
 assignees: ''
 
 ---
