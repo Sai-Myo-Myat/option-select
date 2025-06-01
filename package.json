@@ -20,7 +20,7 @@
     "changeset": "changeset",
     "version": "changeset version",
     "prepublishOnly": "changeset publish",
-    "release": "changeset publish"
+    "release": "changeset publish --yes"
   },
   "license": "MIT",
   "peerDependencies": {
