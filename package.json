@@ -19,7 +19,8 @@
     "prepare": "yarn build",
     "changeset": "changeset",
     "version": "changeset version",
-    "prepublishOnly": "changeset publish"
+    "prepublishOnly": "changeset publish",
+    "release": "changeset publish"
   },
   "license": "MIT",
   "peerDependencies": {
