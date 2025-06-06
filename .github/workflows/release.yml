@@ -1,30 +1,32 @@
-name: Release
+name: Publish to npm
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Create Release Pull Request or Publish
-        uses: changesets/action@v1
+      - name: Build package
+        run: yarn release
+
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v3
         with:
-          publish: yarn release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public

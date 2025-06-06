@@ -17,10 +17,7 @@
     "test": "jest",
     "lint": "eslint .",
     "prepare": "yarn build",
-    "changeset": "changeset",
-    "version": "changeset version",
-    "prepublishOnly": "changeset publish",
-    "release": "changeset publish --yes"
+    "release": "yarn build"
   },
   "license": "MIT",
   "peerDependencies": {
