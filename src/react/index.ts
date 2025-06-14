@@ -7,9 +7,7 @@ export const useOptionSelect = <T extends { subItems?: T[] }>({
   getId,
   onSelectionChange,
 }: OptionSelectProps<T>) => {
-  const [store] = useState(
-    () => new DATA_CENTRE(items, getId)
-  );
+  const [store] = useState(() => new DATA_CENTRE(items, getId));
   const [version, setVersion] = useState(0);
 
   useEffect(() => {
@@ -24,6 +22,13 @@ export const useOptionSelect = <T extends { subItems?: T[] }>({
   }, [onSelectionChange, version, store]);
 
   return {
+    /**
+     * Returns all items wrapped as OptionItem<T>, which includes:
+     * - item: your original item
+     * - isSelected: selection state
+     * - toggleSelection: function to toggle selection
+     * - subItems: nested OptionItems (if any)
+     */
     getAllItems: () => store.getAllItems(items),
     selectAll: () => store.selectAll(),
     deselectAll: () => store.deselectAll(),
