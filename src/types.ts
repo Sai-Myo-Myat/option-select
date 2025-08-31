@@ -1,9 +1,9 @@
 export interface OptionSelectProps<T> {
   items: T[];
-  getId: (item: T) => string;
+  getId: (item: T) => string | number;
   onSelectionChange?: (items: T[]) => void;
 }
-   
+
 export interface OptionItem<T> {
   item: T;
   isSelected: boolean;

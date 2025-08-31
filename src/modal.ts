@@ -1,10 +1,10 @@
 import { OptionItem, Subscriber } from "./types";
 
 export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
-  private selectedIds = new Set<string>();
+  private selectedIds = new Set<string | number>();
   private subscribers: Subscriber[] = [];
 
-  constructor(private items: T[], private getId: (item: T) => string) {
+  constructor(private items: T[], private getId: (item: T) => string | number) {
     this.items.forEach((item) => {
       if (item.isSelected) {
         this.selectedIds.add(this.getId(item));
@@ -31,7 +31,7 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
     };
   }
 
-  private getAllItemIds(items: T[]): string[] {
+  private getAllItemIds(items: T[]): (string | number)[] {
     return items.flatMap((item) => [
       this.getId(item),
       ...this.getAllChildIds(item),
@@ -48,7 +48,7 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
     this.notify();
   }
 
-  private getAllChildIds(item: T): string[] {
+  private getAllChildIds(item: T): (string | number)[] {
     if (!item.subItems) return [];
     return item.subItems.flatMap((sub) => [
       this.getId(sub),
@@ -56,7 +56,7 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
     ]);
   }
 
-  toggleSelection(id: string, item?: T) {
+  toggleSelection(id: string | number, item?: T) {
     const isSelected = this.selectedIds.has(id);
     if (isSelected) {
       this.selectedIds.delete(id);
@@ -74,7 +74,7 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
     this.notify();
   }
 
-  isSelected(id: string, item?: T) {
+  isSelected(id: string | number, item?: T) {
     if (item?.subItems?.length) {
       const allChildrenSelected = this.getAllChildIds(item).every((childId) =>
         this.selectedIds.has(childId)
