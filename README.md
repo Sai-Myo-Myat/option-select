@@ -28,10 +28,11 @@ yarn add option-select
 
 ## Usage
 
-### React Example
+### React Example ( Typescript )
 
 ```tsx
-import { useOptionSelect } from "option-select";
+import { useCallback } from "react";
+import { useOptionSelect, OptionItem } from "option-select";
 
 const items = [
     {
@@ -61,6 +62,14 @@ const items = [
     },
   ];
 
+interface ItemProps {
+  id: string;
+  name: string;
+  age?: number;
+  isSelected?: boolean;
+  subItems?: ItemProps[];
+}
+
 const Demo = () => {
 
     const { getAllItems, selectAll, deselectAll, getSelectedItems } = useOptionSelect(
@@ -74,8 +83,9 @@ const Demo = () => {
     const handleOnChange = useCallback((items) => {
         console.log("selected items", items);
     },[])
-    
-    function renderItem({ item, isSelected, toggleSelection, subItems }) {
+
+    // render item and it's sub items Recursively
+    function renderItem({ item, isSelected, toggleSelection, subItems }: OptionItem<ItemProps>) {
       return (
         <div key={item.id}>
           <label>
