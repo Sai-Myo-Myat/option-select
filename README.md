@@ -1,8 +1,18 @@
 # Headless Option Selection
 
-A headless option selection library for JavaScript front-end frameworks like React (and more later). Supports hierarchical data structures and allows selection tracking with full control.
+A headless option selection library for JavaScript front-end frameworks like React and Nextjs (and more later). It simplifies building **hierarchical selectors**, **multi-select dropdowns**, and **multi level nexted structures** — while giving you full control over UI.
 
 Live demo :  [option-select-demo](https://stackblitz.com/edit/sb1-mtgegjcy?file=src%2FApp.tsx)
+
+## Features
+
+- ✅ **Headless**: Bring your own UI (works with React, Nextjs).
+- ✅ **Hierarchical Selection**: Handles nested data with parent-child relationships.
+- ✅ Select, deselect, toggle items
+- ✅ Select all & deselect all functionality
+- ✅ Retrieve selected items on demand or on every selection changes happen
+- ✅ Accept isSelected for default selection, but if an item has subItems and not all subItems have isSelected: true, the parent’s isSelected state will be ignored.
+- ✅ Store-based architecture (framework-agnostic)
 
 ## Installation
 
@@ -15,15 +25,6 @@ or
 ```sh
 yarn add option-select
 ```
-
-## Features
-
-- ✅ Supports hierarchical data structures (parent item and  sub items)
-- ✅ Select, deselect, toggle items
-- ✅ Select all & deselect all functionality
-- ✅ Retrieve selected items on demand or on every selection changes happen
-- ✅ Accept isSelected for default selection, but if an item has subItems and not all subItems have isSelected: true, the parent’s isSelected state will be ignored.
-- ✅ Store-based architecture (framework-agnostic)
 
 ## Usage
 
@@ -60,44 +61,47 @@ const items = [
     },
   ];
 
-const handleOnChange = useCallback((items) => {
-    console.log("selected items", items);
-},[])
+const Demo = () => {
 
-const { getAllItems, selectAll, deselectAll, getSelectedItems } = useOptionSelect(
-  {
-    items: items,
-    getId: (item) => item.id,
-    onSelectionChange: handleOnChange
-  }
-);
+    const { getAllItems, selectAll, deselectAll, getSelectedItems } = useOptionSelect(
+      {
+        items: items,
+        getId: (item) => item.id,
+        onSelectionChange: handleOnChange
+      }
+    );
 
-function renderItem({ item, isSelected, toggleSelection, subItems }) {
-  return (
-    <div key={item.id}>
-      <label>
-        <input type="checkbox" checked={isSelected} onChange={toggleSelection} />
-        {item.name}
-      </label>
-      {subItems && (
-        <div style={{ paddingLeft: 20 }}>
-          {subItems.map((subItem) => renderItem(subItem))}
+    const handleOnChange = useCallback((items) => {
+        console.log("selected items", items);
+    },[])
+    
+    function renderItem({ item, isSelected, toggleSelection, subItems }) {
+      return (
+        <div key={item.id}>
+          <label>
+            <input type="checkbox" checked={isSelected} onChange={toggleSelection} />
+            {item.name}
+          </label>
+          {subItems && (
+            <div style={{ paddingLeft: 20 }}>
+              {subItems.map((subItem) => renderItem(subItem))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+    
+    return (
+      <div>
+        <button onClick={selectAll}>Select All</button>
+        <button onClick={deselectAll}>Deselect All</button>
+        <button onClick={() => console.log("Selected Items:", getSelectedItems())}>
+          Get Selected Items
+        </button>
+        {getAllItems().map((item) => renderItem(item))}
+      </div>
+    );
 }
-
-return (
-  <div>
-    <button onClick={selectAll}>Select All</button>
-    <button onClick={deselectAll}>Deselect All</button>
-    <button onClick={() => console.log("Selected Items:", getSelectedItems())}>
-      Get Selected Items
-    </button>
-    {getAllItems().map((item) => renderItem(item))}
-  </div>
-);
 ```
 
 ## API
