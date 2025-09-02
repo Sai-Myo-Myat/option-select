@@ -34,7 +34,15 @@ yarn add option-select
 import { useCallback } from "react";
 import { useOptionSelect, OptionItem } from "option-select";
 
-const items = [
+interface ItemProps {
+  id: string;
+  name: string;
+  age?: number;
+  isSelected?: boolean;
+  subItems?: ItemProps[];
+}
+
+const items: ItemProps[] = [
     {
       id: "1",
       name: "Parent 1",
@@ -61,14 +69,6 @@ const items = [
       ],
     },
   ];
-
-interface ItemProps {
-  id: string;
-  name: string;
-  age?: number;
-  isSelected?: boolean;
-  subItems?: ItemProps[];
-}
 
 const Demo = () => {
 
@@ -116,7 +116,7 @@ const Demo = () => {
 
 ## API
 
-#### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange?: (items: T[], selectedItem: T) => void})`
+#### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange?: (selectedItems: T[]) => void})`
 
 uesOptionSlect hook accept three props
 
@@ -124,7 +124,7 @@ uesOptionSlect hook accept three props
   - Selection item array, each with isSelected ( default is false ) and subItems (optional) fields.
 - **getId**
   - Unique id selector function.
-- **onSelectionChange** `(optiona)`
+- **onSelectionChange** `(optional)`
   - Callback function you want to call on every selection changes.
 
 useOptionSelect returns an object with the following methods:
