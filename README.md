@@ -116,12 +116,21 @@ const Demo = () => {
 
 ## API
 
-### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange?: (item: T[]) => void})`
+#### `useOptionSelect({items: T[], getId: (item: T) => string, onSelectionChange?: (items: T[], selectedItem: T) => void})`
 
-Returns an object with the following methods:
+uesOptionSlect hook accept three props
+
+- **items**
+  - Selection item array, each with isSelected ( default is false ) and subItems (optional) fields.
+- **getId**
+  - Unique id selector function.
+- **onSelectionChange** `(optiona)`
+  - Callback function you want to call on every selection changes.
+
+useOptionSelect returns an object with the following methods:
 
 - **`getAllItems(): { item: T; isSelected: boolean; toggleSelection: () => void; subItems?: T[] }[]`**
-  - Returns items wrapped with selection controls.
+  - Returns items with it's corresponding sub items wrapped with selection controls (isSelected, toggleSelection).
 - **`selectAll(): void`**
   - Selects all items.
 - **`deselectAll(): void`**
