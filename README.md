@@ -137,6 +137,18 @@ useOptionSelect returns an object with the following methods:
   - Deselects all items.
 - **`getSelectedItems(): T[]`**
   - Returns selected items in the same hierarchical structure as the input.
+ 
+## 🤝 Contributing
+
+Contributions are welcome!
+
+- Fork the repo and create your branch (git checkout -b feature/amazing-feature).
+
+- Install dependencies with yarn install.
+
+- Open a Pull Request.
+
+See CONTRIBUTING.md for more details.
 
 ## License
 
