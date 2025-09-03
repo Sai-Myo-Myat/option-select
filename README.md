@@ -148,7 +148,7 @@ Contributions are welcome!
 
 - Open a Pull Request.
 
-See CONTRIBUTING.md for more details.
+See [CONTRIBUTING.md](https://github.com/Sai-Myo-Myat/option-select/blob/main/.github/CONTRIBUTING.md) for more details.
 
 ## License
 
