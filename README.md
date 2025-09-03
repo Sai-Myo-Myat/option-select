@@ -4,15 +4,15 @@ A headless option selection library for JavaScript front-end frameworks like Rea
 
 Live demo :  [option-select-demo](https://stackblitz.com/edit/sb1-mtgegjcy?file=src%2FApp.tsx)
 
+<img src="https://github.com/user-attachments/assets/0b448e36-9958-45a4-9198-17735689f3f1" width="400" alt="option-select demo">
+
 ## Features
 
 - ✅ **Headless**: Bring your own UI (works with React, Nextjs).
 - ✅ **Hierarchical Selection**: Handles nested data with parent-child relationships.
-- ✅ Select, deselect, toggle items
 - ✅ Select all & deselect all functionality
 - ✅ Retrieve selected items on demand or on every selection changes happen
 - ✅ Accept isSelected for default selection, but if an item has subItems and not all subItems have isSelected: true, the parent’s isSelected state will be ignored.
-- ✅ Store-based architecture (framework-agnostic)
 
 ## Installation
 
