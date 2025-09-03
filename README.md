@@ -1,6 +1,6 @@
 # Headless Option Selection
 
-A headless option selection library for JavaScript front-end frameworks like React and Nextjs (and more later). It simplifies building **hierarchical selectors**, **multi-select dropdowns**, and **multi level nested structures** — while giving you full control over UI.
+A headless option selection library for JavaScript front-end frameworks like React and Nextjs (and more later). It simplifies building **hierarchical selectors**, **multi-select dropdowns**, and **tree-style selectors** — while giving you full control over UI.
 
 Live demo :  [option-select-demo](https://stackblitz.com/edit/sb1-mtgegjcy?file=src%2FApp.tsx)
 
