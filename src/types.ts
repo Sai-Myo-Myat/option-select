@@ -1,8 +1,13 @@
 export interface OptionSelectProps<T> {
-  items: T[];
+  items: OptionItemWithSubItems<T>[];
   getId: (item: T) => string | number;
   onSelectionChange?: (items: T[]) => void;
 }
+
+export type OptionItemWithSubItems<T> = T & {
+  subItems?: OptionItemWithSubItems<T>[];
+  isSelected?: boolean;
+};
 
 export interface OptionItem<T> {
   item: T;
@@ -12,3 +17,10 @@ export interface OptionItem<T> {
 }
 
 export type Subscriber = () => void;
+
+export interface Result<T> {
+  getAllItems: () => OptionItem<T>[];
+  selectAll: () => void;
+  deselectAll: () => void;
+  getSelectedItems: () => OptionItemWithSubItems<T>[];
+}

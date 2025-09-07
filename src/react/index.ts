@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { DATA_CENTRE } from "../modal";
-import { OptionSelectProps } from "../types";
+import { OptionSelectProps, Result } from "../types";
 
 /**
  * React hook for managing selectable options with nested sub-items.
  *
- * @template T - The type of each item, must optionally have a subItems property.
+ * @template T - The type of each item.
  * @param {Object} props - The props for the hook.
  * @param {T[]} props.items - The array of items to manage selection for.
  * @param {(item: T) => string | number} props.getId - Function to get a unique ID for each item.
@@ -16,11 +16,11 @@ import { OptionSelectProps } from "../types";
  * @returns {() => void} deselectAll - Deselects all items.
  * @returns {() => T[]} getSelectedItems - Returns currently selected items.
  */
-export const useOptionSelect = <T extends { subItems?: T[] }>({
+export const useOptionSelect = <T>({
   items,
   getId,
   onSelectionChange,
-}: OptionSelectProps<T>) => {
+}: OptionSelectProps<T>): Result<T> => {
   const [store] = useState(() => new DATA_CENTRE(items, getId));
   const [version, setVersion] = useState(0);
 
