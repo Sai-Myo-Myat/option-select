@@ -101,10 +101,8 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
             }
           }
         }
-        this.selectedRootOrder.push(id);
-      } else if (isRootLevel) {
-        this.selectedRootOrder.push(id);
       }
+      this.selectedRootOrder.push(id);
       this.selectedIds.add(id);
       if (item)
         this.getAllChildIds(item).forEach((childId) =>
