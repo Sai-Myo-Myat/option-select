@@ -3,17 +3,25 @@ import { OptionItem, Subscriber } from "./types";
 export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
   private selectedIds = new Set<string | number>();
   private subscribers: Subscriber[] = [];
+  private limit = 0;
+  private selectedRootOrder: (string | number)[] = [];
 
-  constructor(private items: T[], private getId: (item: T) => string | number) {
+  constructor(
+    private items: T[],
+    private getId: (item: T) => string | number,
+    limit?: number
+  ) {
+    this.limit = limit ?? 0;
     this.items.forEach((item) => {
       if (item.isSelected) {
-        this.selectedIds.add(this.getId(item));
+        const id = this.getId(item);
+        this.selectedIds.add(id);
+        this.selectedRootOrder.push(id);
       }
-
       if (item.subItems) {
-        item.subItems.forEach((item) => {
-          if (item.isSelected) {
-            this.selectedIds.add(this.getId(item));
+        item.subItems.forEach((sub) => {
+          if (sub.isSelected) {
+            this.selectedIds.add(this.getId(sub));
           }
         });
       }
@@ -40,11 +48,13 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
 
   selectAll() {
     this.selectedIds = new Set(this.getAllItemIds(this.items));
+    this.selectedRootOrder = this.items.map((item) => this.getId(item));
     this.notify();
   }
 
   deselectAll() {
     this.selectedIds.clear();
+    this.selectedRootOrder = [];
     this.notify();
   }
 
@@ -58,13 +68,43 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
 
   toggleSelection(id: string | number, item?: T) {
     const isSelected = this.selectedIds.has(id);
+    // Check if this is a root-level item
+    const isRootLevel = item
+      ? this.items.some((root) => this.getId(root) === id)
+      : false;
     if (isSelected) {
       this.selectedIds.delete(id);
+      if (isRootLevel) {
+        this.selectedRootOrder = this.selectedRootOrder.filter(
+          (rootId) => rootId !== id
+        );
+      }
       if (item)
         this.getAllChildIds(item).forEach((childId) =>
           this.selectedIds.delete(childId)
         );
     } else {
+      // If root-level and limit is set, enforce limit by replacing oldest
+      if (isRootLevel && this.limit > 0) {
+        if (this.selectedRootOrder.length >= this.limit) {
+          const oldestId = this.selectedRootOrder.shift();
+          if (oldestId !== undefined) {
+            // Remove the oldest root and its children
+            const oldestRoot = this.items.find(
+              (root) => this.getId(root) === oldestId
+            );
+            this.selectedIds.delete(oldestId);
+            if (oldestRoot) {
+              this.getAllChildIds(oldestRoot).forEach((childId) =>
+                this.selectedIds.delete(childId)
+              );
+            }
+          }
+        }
+        this.selectedRootOrder.push(id);
+      } else if (isRootLevel) {
+        this.selectedRootOrder.push(id);
+      }
       this.selectedIds.add(id);
       if (item)
         this.getAllChildIds(item).forEach((childId) =>
