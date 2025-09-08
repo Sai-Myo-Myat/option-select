@@ -14,6 +14,10 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
     this.limit = limit ?? 0;
     this.items.forEach((item) => {
       if (item.isSelected) {
+        //ignore isSelected if selection limit is reached
+        if (this.limit > 0 && this.selectedRootOrder.length >= this.limit) {
+          return;
+        }
         const id = this.getId(item);
         this.selectedIds.add(id);
         this.selectedRootOrder.push(id);
