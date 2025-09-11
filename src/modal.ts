@@ -51,8 +51,34 @@ export class DATA_CENTRE<T extends { subItems?: T[]; isSelected?: boolean }> {
   }
 
   selectAll() {
-    this.selectedIds = new Set(this.getAllItemIds(this.items));
-    this.selectedRootOrder = this.items.map((item) => this.getId(item));
+    if (this.limit > 0) {
+      // Get currently selected root ids
+      const selectedRootSet = new Set(this.selectedRootOrder);
+      // If already at or above limit, do nothing
+      if (this.selectedRootOrder.length >= this.limit) {
+        return;
+      }
+      // Filter out already selected root items
+      const unselectedRoots = this.items.filter(
+        (item) => !selectedRootSet.has(this.getId(item))
+      );
+      // Calculate how many more can be selected
+      const canSelectCount = this.limit - this.selectedRootOrder.length;
+      // Take only as many as needed to reach the limit
+      const toSelect = unselectedRoots.slice(0, canSelectCount);
+      // Add their ids and all their children
+      toSelect.forEach((item) => {
+        const id = this.getId(item);
+        this.selectedRootOrder.push(id);
+        this.selectedIds.add(id);
+        this.getAllChildIds(item).forEach((childId) =>
+          this.selectedIds.add(childId)
+        );
+      });
+    } else {
+      this.selectedIds = new Set(this.getAllItemIds(this.items));
+      this.selectedRootOrder = this.items.map((item) => this.getId(item));
+    }
     this.notify();
   }
 
