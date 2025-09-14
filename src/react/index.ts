@@ -20,8 +20,9 @@ export const useOptionSelect = <T>({
   items,
   getId,
   onSelectionChange,
+  limit,
 }: OptionSelectProps<T>): Result<T> => {
-  const [store] = useState(() => new DATA_CENTRE(items, getId));
+  const [store] = useState(() => new DATA_CENTRE(items, getId, limit));
   const [version, setVersion] = useState(0);
 
   useEffect(() => {

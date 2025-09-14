@@ -2,6 +2,7 @@ export interface OptionSelectProps<T> {
   items: OptionItemWithSubItems<T>[];
   getId: (item: T) => string | number;
   onSelectionChange?: (items: T[]) => void;
+  limit?: number;
 }
 
 export type OptionItemWithSubItems<T> = T & {
