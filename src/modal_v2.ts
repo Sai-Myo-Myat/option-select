@@ -44,7 +44,7 @@ export function getSelectedItems<T>(
   items: OptionItemWithSubItems<T>[],
   selectedIds: Set<number | string>,
   getId: GetIdFunctionType<T>
-): T[] {
+): OptionItemWithSubItems<T>[] {
   return items
     .map((item) => {
       const subItems = item.subItems
@@ -57,7 +57,7 @@ export function getSelectedItems<T>(
       }
       return null;
     })
-    .filter(Boolean) as T[];
+    .filter(Boolean) as OptionItemWithSubItems<T>[];
 }
 
 export function toggleSelection<T>(
