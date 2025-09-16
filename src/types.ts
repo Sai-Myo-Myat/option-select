@@ -19,6 +19,8 @@ export interface OptionItem<T> {
 
 export type Subscriber = () => void;
 
+export type GetIdFunctionType<T> = (item: T) => string | number;
+
 export interface Result<T> {
   getAllItems: () => OptionItem<T>[];
   selectAll: () => void;
