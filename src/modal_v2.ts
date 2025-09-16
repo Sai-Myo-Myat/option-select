@@ -24,19 +24,20 @@ export function isSelected<T>(
   item: OptionItemWithSubItems<T>,
   selectedIds: Set<string | number>
 ) {
+  const newSelectedIds = new Set(selectedIds);
   if (item?.subItems?.length) {
     const allChildrenSelected = getAllChildIds(item, getId).every((childId) =>
-      selectedIds.has(childId)
+      newSelectedIds.has(childId)
     );
-    if (allChildrenSelected && selectedIds.has(id)) {
-      selectedIds.add(id);
+    if (allChildrenSelected && newSelectedIds.has(id)) {
+      newSelectedIds.add(id);
     }
     if (!allChildrenSelected) {
-      selectedIds.delete(id);
+      newSelectedIds.delete(id);
     }
     return allChildrenSelected;
   }
-  return selectedIds.has(id);
+  return newSelectedIds.has(id);
 }
 
 export function getSelectedItems<T>(
