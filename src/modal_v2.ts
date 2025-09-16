@@ -58,3 +58,67 @@ export function getSelectedItems<T>(
     })
     .filter(Boolean) as T[];
 }
+
+export function toggleSelection<T>(
+  id: string | number,
+  item: OptionItemWithSubItems<T>,
+  getId: GetIdFunctionType<T>,
+  items: T[],
+  selectedIds: Set<number | string>,
+  selectedRootItemIds: (string | number)[],
+  limit: number
+): {
+  selectedIds: Set<number | string>;
+  selectedRootItemIds: (string | number)[];
+  item: OptionItemWithSubItems<T>;
+} {
+  const newSelectedIds = new Set(selectedIds);
+  const newItem = item;
+  let newSelectedRootItemIds = selectedRootItemIds;
+  const isSelected = newSelectedIds.has(id);
+  // Check if this is a root-level item
+  const isRootLevel = newItem
+    ? items.some((root) => getId(root) === id)
+    : false;
+  if (isSelected) {
+    newSelectedIds.delete(id);
+    if (isRootLevel) {
+      newSelectedRootItemIds = newSelectedRootItemIds.filter(
+        (rootId) => rootId !== id
+      );
+    }
+    if (newItem)
+      getAllChildIds(newItem, getId).forEach((childId) =>
+        newSelectedIds.delete(childId)
+      );
+  } else {
+    // If root-level and limit is set, enforce limit by replacing oldest
+    if (isRootLevel && limit > 0) {
+      if (newSelectedRootItemIds.length >= limit) {
+        const oldestId = newSelectedRootItemIds.shift();
+        if (oldestId !== undefined) {
+          // Remove the oldest root and its children
+          const oldestRoot = items.find((root) => getId(root) === oldestId);
+          newSelectedIds.delete(oldestId);
+          if (oldestRoot) {
+            getAllChildIds(oldestRoot, getId).forEach((childId) =>
+              newSelectedIds.delete(childId)
+            );
+          }
+        }
+      }
+    }
+    newSelectedRootItemIds.push(id);
+    newSelectedIds.add(id);
+    if (newItem)
+      getAllChildIds(newItem, getId).forEach((childId) =>
+        newSelectedIds.add(childId)
+      );
+  }
+
+  return {
+    selectedIds: newSelectedIds,
+    selectedRootItemIds: newSelectedRootItemIds,
+    item: newItem,
+  };
+}
