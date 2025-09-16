@@ -19,11 +19,11 @@ export function getAllItemIds<T>(
 }
 
 export function isSelected<T>(
-  id: string | number,
   getId: GetIdFunctionType<T>,
   item: OptionItemWithSubItems<T>,
   selectedIds: Set<string | number>
 ) {
+  const id = getId(item);
   const newSelectedIds = new Set(selectedIds);
   if (item?.subItems?.length) {
     const allChildrenSelected = getAllChildIds(item, getId).every((childId) =>
@@ -61,7 +61,6 @@ export function getSelectedItems<T>(
 }
 
 export function toggleSelection<T>(
-  id: string | number,
   item: OptionItemWithSubItems<T>,
   getId: GetIdFunctionType<T>,
   items: T[],
@@ -73,6 +72,7 @@ export function toggleSelection<T>(
   selectedRootItemIds: (string | number)[];
   item: OptionItemWithSubItems<T>;
 } {
+  const id = getId(item);
   const newSelectedIds = new Set(selectedIds);
   const newItem = item;
   let newSelectedRootItemIds = selectedRootItemIds;
