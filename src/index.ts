@@ -1,2 +1,2 @@
 export { OptionItem } from "./types";
-export * from "./react";
+export * from "./react/v2";

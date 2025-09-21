@@ -86,25 +86,24 @@ export function useOptionSelect<T>({
     [items, getId, selectedIds, selectedRootItemIds, limit, onSelectionChange]
   );
 
-  // Get all items with selection state and toggleSelection
+  // Recursively get all items with selection state and toggleSelection
+  const buildItemTree = useCallback(
+    (item: OptionItemWithSubItems<T>): OptionItem<T> => {
+      return {
+        item,
+        isSelected: selectedIds.has(getId(item)),
+        toggleSelection: () => handleToggleSelection(item),
+        subItems: item.subItems
+          ? item.subItems.map((sub) => buildItemTree(sub))
+          : undefined,
+      };
+    },
+    [selectedIds, getId, handleToggleSelection]
+  );
+
   const getAllItems = useCallback(() => {
-    return items.map(
-      (item) =>
-        ({
-          item,
-          isSelected: selectedIds.has(getId(item)),
-          toggleSelection: () => handleToggleSelection(item),
-          subItems: item.subItems
-            ? item.subItems.map((sub) => ({
-                item: sub,
-                isSelected: selectedIds.has(getId(sub)),
-                toggleSelection: () => handleToggleSelection(sub),
-                subItems: sub.subItems,
-              }))
-            : undefined,
-        } as OptionItem<T>)
-    );
-  }, [items, selectedIds, getId, handleToggleSelection]);
+    return items.map((item) => buildItemTree(item));
+  }, [items, buildItemTree]);
 
   // Get currently selected items
   const getSelectedItemsCallback = useCallback(() => {
